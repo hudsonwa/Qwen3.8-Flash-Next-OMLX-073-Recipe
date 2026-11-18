@@ -1,0 +1,21 @@
+name: ci
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shell syntax
+        run: for f in setup.sh scripts/*.sh; do bash -n ""; done
+      - name: python compiles
+        run: python3 -m py_compile scripts/*.py
+      - name: plist XML (if present)
+        run: python3 -c "import glob; files=glob.glob('scripts/*.plist.in'); import xml.etree.ElementTree as ET; [ET.parse(f) for f in files]; print('plist OK' if files else 'no plist template')"
+      - name: pins consistency
+        run: |
+          grep -q 2acfde41aeac0b022dbca803ca109437f3ccaf0c33f3415881526b985bee86f2 MODELS.md
+          grep -q 2322c888c2c314d4eceddf0159dec5d821aa1e41 MODELS.md setup.sh scripts/verify.sh
+          grep -q 8010 setup.sh scripts/verify.sh docs/COMPAT.md
+          echo pins consistent
+      - name: receipts parse
+        run: python3 -c "import json,glob; [json.load(open(f)) for f in glob.glob('results/*.json')]; print('json OK')"
