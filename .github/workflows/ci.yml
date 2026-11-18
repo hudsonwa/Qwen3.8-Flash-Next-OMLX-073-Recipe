@@ -8,11 +8,12 @@ jobs:
       - name: shell syntax
         run: |
           bash -n setup.sh
-          for f in scripts/*.sh; do bash -n ""; done
+          bash -n scripts/install_plist.sh
+          bash -n scripts/verify.sh
       - name: python compiles
         run: python3 -m py_compile scripts/*.py
       - name: plist check
-        run: python3 -c "import glob; files=glob.glob('scripts/*.plist.in'); import xml.etree.ElementTree as ET; [ET.parse(f) for f in files]; print(plist OK if files else no plist template)"
+        run: python3 -c "import glob; files=glob.glob('scripts/*.plist.in'); import xml.etree.ElementTree as ET; [ET.parse(f) for f in files]; print('plist OK' if files else 'no plist template')"
       - name: pins consistency
         run: |
           grep -q 2acfde41aeac0b022dbca803ca109437f3ccaf0c33f3415881526b985bee86f2 MODELS.md
@@ -20,4 +21,4 @@ jobs:
           grep -q 8010 setup.sh scripts/verify.sh docs/COMPAT.md
           echo pins-consistent
       - name: receipts parse
-        run: python3 -c "import json,glob; [json.load(open(f)) for f in glob.glob('results/*.json')]; print(json-ok)"
+        run: python3 -c "import json,glob; [json.load(open(f)) for f in glob.glob('results/*.json')]; print('json-ok')"
