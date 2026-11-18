@@ -11,5 +11,6 @@
 - **Quality claim**: A/B on the same engine, same seed policy, blind-rated;
   single-run vibes are not quality evidence. The quality CONTRACT (temperatures,
   penalties, MTP) is configuration, not a quality result.
-- Every JSON receipt carries: UTC-ish local timestamp, engine version, model
-  revision, machine memory class, and the command that made it.
+- Every JSON receipt from `scripts/health_receipt.py` carries: local timestamp with
+  UTC offset, engine version, model revision, chip, memory, macOS version, and the
+  command that made it, plus `kind` = `liveness-only` or `throughput-eligible`.

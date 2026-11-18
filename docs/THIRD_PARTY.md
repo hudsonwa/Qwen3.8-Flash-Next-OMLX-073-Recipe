@@ -19,11 +19,14 @@ It ships no engine code and no model weights.
 2. **oMLX — https://github.com/jundot/omlx — © jundot and contributors.**
    The engine this whole recipe exists to run. The app, `omlx` CLI, oQ4e
    quantization, MTP support and every performance number's substrate.
-   Check the oMLX repo for its license before redistribution.
+   Apache-2.0 per its GitHub repo.
 3. **Qwen — the Flash-Next base model** (Qwen4-architecture preview, 125B MoE
    / ~6B active). All model rights belong to their holders; the
    `Jundot/Qwen3.8-Flash-Next-oQ4e-mtp` packaging is a derivative quant by
-   the oMLX author, on Hugging Face under its own terms.
+   the oMLX author (base model `Qwen/Qwen3.8-Flash-Next`). Its Hugging Face
+   card lists the licence as **`qwen-community-1.0`** (not Apache/MIT); read
+   the `LICENSE` file in that model repo before using or redistributing the
+   weights. This recipe downloads them for you; it does not relicense them.
 4. **Hermes Agent — https://github.com/NousResearch/hermes-agent** — the agent
    runtime used to author and verify this recipe. Any Hermes-specific config
    in docs is illustrative; Hermes has its own license and repo.

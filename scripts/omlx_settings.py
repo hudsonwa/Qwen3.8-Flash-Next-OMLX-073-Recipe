@@ -5,7 +5,7 @@ import json, pathlib
 
 p = pathlib.Path.home()/'.omlx/settings.json'
 s = json.loads(p.read_text()) if p.exists() else {'version':'1.0'}
-s.setdefault('server', {}).setdefault('host','0.0.0.0')
+s.setdefault('server', {}).setdefault('host','127.0.0.1')  # local-only by default; setup.sh BIND_LAN=1 opens it
 s['server'].setdefault('port', 8010)
 s['server'].setdefault('auto_start_on_launch', True)
 s.setdefault('model', {}).setdefault('model_dirs', [])
@@ -19,4 +19,5 @@ s.setdefault('cache', {}).setdefault('ssd_cache_dir', str(pathlib.Path.home()/'.
 pathlib.Path.home().joinpath('.omlx/ssd-cache').mkdir(parents=True, exist_ok=True)
 p.parent.mkdir(parents=True, exist_ok=True)
 p.write_text(json.dumps(s, indent=1))
+p.chmod(0o600)  # may hold the API key
 print('settings.json ensure-keys OK')

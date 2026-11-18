@@ -11,7 +11,7 @@ repo: `AGENT.md` is written for the agent, not for you.
 
 - oMLX **0.7.3** (pinned DMG + SHA256) installed to `~/Applications`
 - `Jundot/Qwen3.8-Flash-Next-oQ4e-mtp` @ revision `2322c888c2c314d4eceddf0159dec5d821aa1e41` (~100 GB, 21 shards) under `~/models/`
-- Server on `http://<host>:8010/v1`, OpenAI-compatible, API key auth
+- Server on `http://127.0.0.1:8010/v1` (local-only by default; `BIND_LAN=1` to open it to your network), OpenAI-compatible, API key auth
 - Quality contract (sampling + MTP + cache pins) written to per-model settings
 - `scripts/verify.sh`: fail-closed checks, exit 0 only on full pass
 - A smoke receipt proving the endpoint answered after install
@@ -21,7 +21,8 @@ repo: `AGENT.md` is written for the agent, not for you.
 ```bash
 git clone https://github.com/hudsonwa/Qwen3.8-Flash-Next-OMLX-073-Recipe.git
 cd Qwen3.8-Flash-Next-OMLX-073-Recipe
-bash setup.sh          # installs engine + weights + config; safe to re-run
+bash setup.sh          # installs engine + weights + config, starts the server; safe to re-run
+                       # options: BIND_LAN=1 (reachable from other machines), INSTALL_PLIST=1 (login item)
 bash scripts/verify.sh # must exit 0
 ```
 
@@ -33,7 +34,8 @@ per-model settings vs global, port identity, key handling).
 
 ## Honesty contract
 
-- Every number in `results/` carries the machine stamp and command that produced it.
+- Receipts written by `scripts/health_receipt.py` carry the machine stamp and the command that produced it.
+  The one receipt from the first release predates that and is liveness-only (see `results/README.md`).
 - `results/*-PENDING.md` means: claimed but not yet receipted. Do not cite.
 - Nothing here is benchmarked-quality: quality claims need the A/B protocol in `docs/METHODOLOGY.md`.
 
@@ -49,7 +51,7 @@ endorsed it; all engineering credit for the underlying systems is theirs.
 2. **[oMLX](https://github.com/jundot/omlx) by jundot — the serving engine this recipe configures.**
    The app, the `omlx` CLI, the oQ4e quant, the MTP implementation and the
    `Jundot/Qwen3.8-Flash-Next-oQ4e-mtp` checkpoint packaging are all oMLX work.
-3. **Qwen team — the Flash-Next checkpoint itself** ([base weights](https://huggingface.co/Jundot/Qwen3.8-Flash-Next-oQ4e-mtp), Qwen4-arch preview, 125B MoE / ~6B act).
+3. **Qwen team — the Flash-Next checkpoint itself** (licence `qwen-community-1.0`, see `docs/THIRD_PARTY.md`) ([base weights](https://huggingface.co/Jundot/Qwen3.8-Flash-Next-oQ4e-mtp), Qwen4-arch preview, 125B MoE / ~6B act).
 
 License mapping and full third-party notices: `docs/THIRD_PARTY.md`.
 
@@ -61,8 +63,9 @@ License mapping and full third-party notices: `docs/THIRD_PARTY.md`.
 | `BOOTSTRAP.md` | Human-readable step order |
 | `MODELS.md` | Pinned DMG SHA + HF revision + shard count |
 | `setup.sh` | One-shot install; idempotent; fail-closed |
-| `scripts/verify.sh\ | Post-install gate, exit 0 = verified |
-| `scripts/health\_receipt.py\ | Writes the smoke receipt to `results/` |
+| `scripts/verify.sh` | Post-install gate, exit 0 = verified |
+| `scripts/health_receipt.py` | Writes the smoke receipt to `results/` |
+| `scripts/uninstall_plist.sh` | Removes the optional login item |
 | `results/` | Dated receipts from the reference machine |
 | `docs/` | COMPAT / TRAPS / METHODOLOGY / PRIVACY / THIRD\_PARTY |
 

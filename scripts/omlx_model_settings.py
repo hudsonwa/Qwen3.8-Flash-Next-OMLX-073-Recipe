@@ -31,7 +31,7 @@ def main():
     old = models.get(KEY, {})
     merged = dict(old); merged.update(CONTRACT)
     models[KEY] = merged
-    MS.parent.mkdir(parent_ok := True, exist_ok=True) if False else MS.parent.mkdir(parents=True, exist_ok=True)
+    MS.parent.mkdir(parents=True, exist_ok=True)
     MS.write_text(json.dumps(data, indent=1))
     print(f'quality contract written for {KEY} ({len(merged)} keys)')
 
